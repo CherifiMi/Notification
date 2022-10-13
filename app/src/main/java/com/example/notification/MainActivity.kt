@@ -92,13 +92,13 @@ fun App() {
 
         // large text notification button
         Button(onClick = {
-            /*showLargeTextNotification(
+            showLargeTextNotification(
                 context,
                 channelId,
                 notificationId + 1,
                 "My Large Text Notification",
                 bigText
-            )*/
+            )
         }, modifier = Modifier.padding(top = 16.dp)) {
             Text(text = "Large Text Notification")
         }
