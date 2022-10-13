@@ -1,7 +1,11 @@
 package com.example.notification
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,8 +18,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -40,27 +46,31 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App() {
+    val context = LocalContext.current
+    val channelId = "MyTestChannel"
+    val notificationId = 0
+    val myBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.header)
+    val bigText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
+    LaunchedEffect(Unit){
+        createNotificationChannel(channelId, context)
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.padding(100.dp)
     ) {
-        Text(
-            "Notifications in Jetpack Compose",
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(bottom = 100.dp)
-        )
 
         // simple notification button
         Button(onClick = {
-           /* showSimpleNotification(
+           showSimpleNotification(
                 context,
                 channelId,
                 notificationId,
                 "Simple notification",
                 "This is a simple notification with default priority."
-            )*/
+            )
         }, modifier = Modifier.padding(top = 16.dp)) {
             Text(text = "Simple Notification")
         }
@@ -122,6 +132,41 @@ fun App() {
 }
 
 
+fun createNotificationChannel(channelId: String, context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val name = "MyTestChannel"
+        val descriptionText = "My important test channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelId, name, importance).apply {
+            description = descriptionText
+        }
+
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+}
+// shows notification with a title and one-line content text
+fun showSimpleNotification(
+    context: Context,
+    channelId: String,
+    notificationId: Int,
+    textTitle: String,
+    textContent: String,
+    priority: Int = NotificationCompat.PRIORITY_DEFAULT
+) {
+    val builder = NotificationCompat.Builder(context, channelId)
+        .setSmallIcon(R.drawable.ic_edit_location)
+        .setContentTitle(textTitle)
+        .setContentText(textContent)
+        .setPriority(priority)
+
+    with(NotificationManagerCompat.from(context)) {
+        notify(notificationId, builder.build())
+    }
+}
+
+/*
 // shows notification with a big picture and an auto-hiding thumbnail
 fun showBigPictureWithThumbnailNotification(
     context: Context,
@@ -148,3 +193,5 @@ fun showBigPictureWithThumbnailNotification(
         notify(notificationId, builder.build())
     }
 }
+
+*/
