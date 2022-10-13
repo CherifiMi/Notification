@@ -119,14 +119,14 @@ fun App() {
 
         // big picture with auto hiding thumbnail notification
         Button(onClick = {
-            /*showBigPictureWithThumbnailNotification(
+            showBigPictureWithThumbnailNotification(
                 context,
                 channelId,
                 notificationId + 3,
                 "Big Picture + Avatar Notification",
-                "This is a notification showing a big picture and an auto-hiding avatar.",
+                bigText,
                 myBitmap
-            )*/
+            )
         }, modifier = Modifier.padding(top = 16.dp)) {
             Text(text = "Big Picture + Big Icon Notification")
         }
