@@ -105,14 +105,14 @@ fun App() {
 
         // large text with big icon notification
         Button(onClick = {
-            /*showLargeTextWithBigIconNotification(
+            showLargeTextWithBigIconNotification(
                 context,
                 channelId,
                 notificationId + 2,
                 "Large Text with Big Icon Notification",
-                "This is a large text notification with a big icon on the right.",
+                bigText,
                 myBitmap
-            )*/
+            )
         }, modifier = Modifier.padding(top = 16.dp)) {
             Text(text = "Large Text + Big Icon Notification")
         }
