@@ -1,5 +1,7 @@
 package com.example.notification
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.notification.ui.theme.NotificationTheme
 
 class MainActivity : ComponentActivity() {
@@ -115,5 +119,32 @@ fun App() {
             Text(text = "Big Picture + Big Icon Notification")
         }
     }
+}
 
+
+// shows notification with a big picture and an auto-hiding thumbnail
+fun showBigPictureWithThumbnailNotification(
+    context: Context,
+    channelId: String,
+    notificationId: Int,
+    textTitle: String,
+    textContent: String,
+    bigImage: Bitmap,
+    priority: Int = NotificationCompat.PRIORITY_DEFAULT
+) {
+    val builder = NotificationCompat.Builder(context, channelId)
+        .setSmallIcon(R.drawable.ic_edit_location)
+        .setContentTitle(textTitle)
+        .setContentText(textContent)
+        .setLargeIcon(bigImage)
+        .setStyle(
+            NotificationCompat.BigPictureStyle()
+                .bigPicture(bigImage)
+                .bigLargeIcon(null)
+        )
+        .setPriority(priority)
+
+    with(NotificationManagerCompat.from(context)) {
+        notify(notificationId, builder.build())
+    }
 }
